@@ -1,4 +1,6 @@
 /**
+ * MU:25125621
+ * Name:Lin Jinhan
  * filename: main.pde
  * Module: Main Program Entry and State Machine
  * Function: Manage global game status, module instances, 
