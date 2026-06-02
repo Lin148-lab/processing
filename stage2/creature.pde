@@ -1,7 +1,6 @@
 /**
- * 组员B：Creature.pde////////////////
- * 个体类
- * 注意字段名已和组员D统一
+ *MU:        25125109      
+ *Name:      Shi Yichen
  */
 class Creature {
   public float hand;                                                             //hand
