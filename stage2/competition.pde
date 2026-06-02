@@ -8,6 +8,7 @@ class FinalStats {
 }
 
 /**
+ * MUID:832503117
  * Team Member D: SimulationCore.pde
  * Class Name: SimulationCore
  * Core Tasks:
@@ -47,7 +48,7 @@ class SimulationCore {
       }
     }
     );
-    // Return the top two (if less than 2, return all)
+    // Return the top two (if fewer than 2, return all)
     ArrayList<Creature> top = new ArrayList<Creature>();
     for (int i = 0; i < min(2, simCreatures.size()); i++) {
       top.add(simCreatures.get(i));
@@ -71,20 +72,32 @@ class SimulationCore {
   void prepareSimulation(ArrayList<Creature> sourceList) {
     lastSurvivors = null;
     simCreatures.clear();
+    // Use a 10x10 grid to evenly distribute 100 creatures on the canvas (fixed positions)
+    int cols = 10;
+    int rows = 10;
+    float startX = 80;
+    float startY = 120;
+    float stepX = (width - 160) / (cols - 1);
+    float stepY = (height - 200) / (rows - 1);
+    int idx = 0;
     for (Creature src : sourceList) {
       Creature c = new Creature(src.hand, src.leg, src.temp, src.head);
-      c.x = random(80, width - 80);
-      c.y = random(120, height - 80);
+      int col = idx % cols;
+      int row = idx / cols;
+      c.x = startX + col * stepX;
+      c.y = startY + row * stepY;
       simCreatures.add(c);
+      idx++;
     }
 
     initialized = true;
     isRunning = true;
   }
 
-  // [Team Member D] Simulate per frame
+  // [Team Member D] Per-frame simulation
   void runSimulation(float temp, ArrayList<Food> foods) {
     if (!isRunning) return;
+
     competitionFrames++;
     updateMovement();
     updateEnergy(temp);
@@ -146,7 +159,7 @@ class SimulationCore {
     }
   }
 
-  // Food collision and competition
+  // Food collision and contention
   void checkFoodCollision(ArrayList<Food> foods) {
     for (Food f : foods) {
       if (f.eaten) continue;
@@ -171,109 +184,5 @@ class SimulationCore {
       Creature winner = determineWinner(contenders);
       float energyGain = f.nutrition;
 
-      // High-stature individuals have lower efficiency when eating low-placed food
-      if (!f.isHigh && winner.hand + winner.leg > 200) {
-        energyGain *= 0.6;
-      }
-
-      winner.energy += energyGain;
-      if (winner.energy > 100) {
-        winner.energy = 100;
-      }
-
-      f.eaten = true;
-    }
-  }
-
-  // Required reachable height for high-placed food
-  float heightNeedForFood(float y) {
-    return map(y, 100, environmentManager.highFoodLineY, 140, 40);
-  }
-
-  // Determine the winner of competition
-  Creature determineWinner(ArrayList<Creature> contenders) {
-    Creature best = contenders.get(0);
-    float bestScore = getStrength(best);
-    for (int i = 1; i < contenders.size(); i++) {
-      Creature c = contenders.get(i);
-      float score = getStrength(c);
-      if (score > bestScore) {
-        best = c;
-        bestScore = score;
-      }
-    }
-
-    return best;
-  }
-
-  float getStrength(Creature c) {
-    return c.hand * 0.4 + c.leg * 0.3 + c.head * 0.3 + random(-8, 8);
-  }
-
-  // Remove dead creatures
-  void removeDead() {
-    for (int i = simCreatures.size() - 1; i >= 0; i--) {
-      Creature c = simCreatures.get(i);
-      if (c.energy <= 0) {
-        c.alive = false;
-        simCreatures.remove(i);
-      }
-    }
-
-    if (simCreatures.size() == 2 && (lastSurvivors == null || lastSurvivors.size() != 2)) {
-      lastSurvivors = new ArrayList<Creature>();
-      for (Creature c : simCreatures) {
-        // Deep copy to avoid subsequent reference issues
-        lastSurvivors.add(new Creature(c.hand, c.leg, c.temp, c.head));
-      }
-    }
-  }
-
-  void displayCreatures() {
-    for (Creature c : simCreatures) {
-      c.display();
-    }
-  }
-
-  // [Team Member D] Stop button click
-  boolean checkStopClick() {
-    if (uiManager.isMouseInRect(stopX, stopY, stopW, stopH)) {
-      isRunning = false;
-      return true;
-    }
-    return false;
-  }
-
-  // [Team Member D] Final average genes
-  FinalStats getFinalStats() {
-    FinalStats stats = new FinalStats();
-    if (simCreatures.size() == 0) return stats;
-
-    float sumHand = 0;
-    float sumLeg = 0;
-    float sumTemp = 0;
-    float sumHead = 0;
-
-    for (Creature c : simCreatures) {
-      sumHand += c.hand;
-      sumLeg += c.leg;
-      sumTemp += c.temp;
-      sumHead += c.head;
-    }
-
-    int n = simCreatures.size();
-    stats.avgHand = sumHand / n;
-    stats.avgLeg = sumLeg / n;
-    stats.avgTemp = sumTemp / n;
-    stats.avgHead = sumHead / n;
-    stats.survivorCount = n;
-    stats.timeCost = competitionFrames;
-
-    return stats;
-  }
-
-  // [Team Member D] Automatic termination condition
-  boolean isSimulationOver() {
-    return simCreatures.size() <= 4;
-  }
-}
+      // Taller individuals have reduced efficiency when eating low-placed food
+      if (!f.isHigh && winner
