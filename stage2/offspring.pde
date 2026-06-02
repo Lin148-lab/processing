@@ -1,10 +1,6 @@
 /**
- * 组员B：EvolutionEngine.pde
- * 类名：EvolutionEngine
- * 核心任务：
- * 1. generateOffspring
- * 2. offspringList 存储100个子代
- * 3. displayOffspringPage 展示子代预览
+ *MU:        25125109      
+ *Name:      Shi Yichen
  */
 class EvolutionEngine {
   public ArrayList<Creature> offspringList;                                 //Store offspring data
