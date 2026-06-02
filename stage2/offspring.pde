@@ -14,7 +14,7 @@ class EvolutionEngine {
     offspringList = new ArrayList<Creature>();                             //Initialize the offspring storage list
   }
 
-  // 【组员B】生成100个子代
+  // gGenerate 100 offsping
   void generateOffspring(ParentData p) {
     offspringList.clear();                                                //clear data
 
@@ -33,7 +33,7 @@ class EvolutionEngine {
     }
   }
 
-  // 【组员B】杂交+突变公式
+  // Hybird and mutation
   float inheritGene(float a, float b, float mutationRange) {
     float mixed = lerp(a, b, random(1));                                 // Random proportion linear fusion hybridization of parental genes
     if (random(1) < 0.15) {                                              // 15% probability of triggering gene mutation
@@ -42,7 +42,7 @@ class EvolutionEngine {
     return mixed;
   }
 
-  // 【组员B】子代预览页面
+  // Offspring Preview Page
   void displayOffspringPage() {
     uiManager.drawBackgroundBase();                                      //draw background
     uiManager.drawTitleText("100 OFFSPRING GENERATED", 65);              //draw title
