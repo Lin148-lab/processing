@@ -63,9 +63,6 @@ We measured evolution under the **Normal (20°C)** environment over 10 generatio
 These results satisfy the instructor’s two indicators:  
 (1) longer survival time for a fixed number of survivors, and (2) more survivors within a fixed time.
 
-## Screenshots
-
-> *Add your own screenshots here (offspring grid, competition view, generation result page).*
 
 ## References
 
