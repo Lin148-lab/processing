@@ -67,7 +67,6 @@ These results satisfy the instructor’s two indicators:
 ## References
 
 - Processing Foundation. (2024). *Processing Reference*. https://processing.org/reference/
-- Shiffman, D. (2021). *The Nature of Code – Genetic Algorithms*. https://natureofcode.com/genetic-algorithms/
 
 ## Team Contributions
 
